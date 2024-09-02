@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto1/screens/home_screen.dart';
+import 'package:proyecto1/screens/dashboard_screen.dart';
 import 'package:proyecto1/screens/login_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -12,7 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SW App',
       home: const LoginScreen(),
-      routes: {"/home": (context) => const HomeScreen()},
+      routes: {
+        "/home": (context) => const DashboardScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
