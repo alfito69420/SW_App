@@ -17,20 +17,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int index = 0;
 
   final _key = GlobalKey<ScaffoldMessengerState>();
-
+  
   @override
   Widget build(BuildContext context) {
+
+    final defaultColorScheme = Theme.of(context).colorScheme;
     return Scaffold(
+
       appBar: AppBar(
+        
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(Icons.menu),
-          color: Colors.white,
         ),
-        backgroundColor: ColorsSettings.navColor,
+        //backgroundColor: ColorsSettings.navColor,
+        //backgroundColor: defaultColorScheme.primaryContainer,
         title: const Text(
           "SWApp",
-          style: TextStyle(color: Colors.white),
         ),
         actions: [
           GestureDetector(
@@ -40,7 +43,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.ads_click_sharp),
-                color: Colors.white,
+                //color: Colors.white,
               ),
             ),
           ),
@@ -66,8 +69,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           TabItem(icon: Icons.people, title: 'Profile'),
           TabItem(icon: Icons.exit_to_app, title: 'Exit')
         ],
-        backgroundColor: const Color.fromARGB(255, 255, 85, 7),
-        activeColor: Colors.orangeAccent,
+        backgroundColor: defaultColorScheme.primary,
+        color: defaultColorScheme.onPrimary,
+
+       // activeColor: Colors.orangeAccent,
         onTap: (int i) => setState(() {
           index = i;
         }),
@@ -79,8 +84,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         openButtonBuilder: RotateFloatingActionButtonBuilder(
           child: const Icon(Icons.menu),
           //fabSize: ExpandableFabSize.large,
-          foregroundColor: Colors.white,
-          backgroundColor: const Color.fromARGB(255, 255, 85, 7),
+          //foregroundColor: Colors.white,
+          //backgroundColor: const Color.fromARGB(255, 255, 85, 7),
           //shape: const CircleBorder(),
           angle: 3.14 * 2,
         ),

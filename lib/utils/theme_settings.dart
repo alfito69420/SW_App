@@ -1,15 +1,11 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 
 class ThemeSettings {
   static ThemeData lightTheme(BuildContext context) {
     final theme = ThemeData.light();
     return theme.copyWith(
-      colorScheme: Theme.of(context).colorScheme.copyWith(
-        primary: Colors.greenAccent,
-        
-      )
+      scaffoldBackgroundColor: Colors.amber
     );
-
   }
 
   static ThemeData darkTheme(BuildContext context) {
@@ -23,9 +19,8 @@ class ThemeSettings {
   static ThemeData warmThemelight(BuildContext context) {
     final theme = ThemeData.dark();
     return theme.copyWith(
-      colorScheme: Theme.of(context).colorScheme.copyWith(
-        primary: Colors.grey,
-      )
-    );
+        colorScheme: Theme.of(context).colorScheme.copyWith(
+              primary: Colors.grey,
+            ));
   }
-}
+} */
