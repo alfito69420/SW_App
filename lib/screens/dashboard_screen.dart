@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:proyecto1/screens/home_screen.dart';
 import 'package:proyecto1/screens/profile_screen.dart';
-import 'package:proyecto1/utils/colors_settings.dart';
 import 'package:proyecto1/utils/global_vales.dart';
 
 class DashboardScreen extends StatefulWidget {
