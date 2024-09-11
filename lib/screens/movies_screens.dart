@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto1/database/movies_database.dart';
 import 'package:proyecto1/models/movies_dao.dart';
+import 'package:proyecto1/views/movie_view_item.dart';
 
 class MoviesScreen extends StatefulWidget {
   const MoviesScreen({super.key});
@@ -30,7 +31,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
             if (snapshot.hasData) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  return MovieViewItem();
+                  return MovieViewItem(moviesDao: snapshot.data![index]);
                 },
               );
             } else {
