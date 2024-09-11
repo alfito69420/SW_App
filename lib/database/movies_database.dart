@@ -46,35 +46,35 @@ class MoviesDatabase {
         db.execute(query);
       },
     );
+  } //  close method
 
-    Future<int> INSERT(String table, Map<String, dynamic> row) async {
-      var con = await database;
-      return await con.insert(table, row);
-    } //  close method
+  Future<int> INSERT(String table, Map<String, dynamic> row) async {
+    var con = await database;
+    return await con.insert(table, row);
+  } //  close method
 
-    Future<int> UPDATE(String table, Map<String, dynamic> row) async {
-      var con = await database;
-      return await con.update(
-        table,
-        row,
-        where: 'id_movie = ?',
-        whereArgs: [row['id_movie']],
-      );
-    } //  close method
+  Future<int> UPDATE(String table, Map<String, dynamic> row) async {
+    var con = await database;
+    return await con.update(
+      table,
+      row,
+      where: 'id_movie = ?',
+      whereArgs: [row['id_movie']],
+    );
+  } //  close method
 
-    Future<int> DELETE(String table, int idMovie) async {
-      var con = await database;
-      return await con.delete(table, where: 'id_movie = ?', whereArgs: [idMovie]);
-    } //  close method
+  Future<int> DELETE(String table, int idMovie) async {
+    var con = await database;
+    return await con.delete(table, where: 'id_movie = ?', whereArgs: [idMovie]);
+  } //  close method
 
-    Future<List<MoviesDao>> SELECT() async {
-      var con = await database;
-      var result = await con.query('tbl_movies');
-      return result
-          .map(
-            (movie) => MoviesDao.fromMap(movie),
-          )
-          .toList();
-    } //  close method
+  Future<List<MoviesDao>> SELECT() async {
+    var con = await database;
+    var result = await con.query('tbl_movies');
+    return result
+        .map(
+          (movie) => MoviesDao.fromMap(movie),
+        )
+        .toList();
   }
 }
