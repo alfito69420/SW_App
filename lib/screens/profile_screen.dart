@@ -9,12 +9,11 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final defaultColorScheme = Theme.of(context).colorScheme;
 
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.all(64),
+        padding: const EdgeInsets.all(32),
         child: Column(
           children: [
             Stack(
@@ -24,9 +23,7 @@ class ProfileScreen extends StatelessWidget {
                   height: 120,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: const Image(
-                          image: AssetImage(
-                              "assets/images/profile/profile_pic.jpg"))),
+                      child: const Image(image: AssetImage("assets/pfp.jpg"))),
                 ),
                 Positioned(
                   bottom: 0,
