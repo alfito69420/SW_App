@@ -16,23 +16,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int index = 0;
 
   final _key = GlobalKey<ScaffoldMessengerState>();
-  
+
   @override
   Widget build(BuildContext context) {
-
     final defaultColorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-
       appBar: AppBar(
-        
+        backgroundColor: defaultColorScheme.primary,
         leading: IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.menu),
+          icon: Icon(
+            Icons.menu,
+            color: defaultColorScheme.onPrimary,
+          ),
         ),
         //backgroundColor: ColorsSettings.navColor,
         //backgroundColor: defaultColorScheme.primaryContainer,
-        title: const Text(
+        title: Text(
           "SWApp",
+          style: TextStyle(color: defaultColorScheme.onPrimary),
         ),
         actions: [
           GestureDetector(
@@ -41,7 +43,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               cursor: SystemMouseCursors.click,
               child: IconButton(
                 onPressed: () {},
-                icon: const Icon(Icons.ads_click_sharp),
+                icon: Icon(
+                  Icons.ads_click_sharp,
+                  color: defaultColorScheme.onPrimary,
+                ),
                 //color: Colors.white,
               ),
             ),
@@ -71,7 +76,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: defaultColorScheme.primary,
         color: defaultColorScheme.onPrimary,
 
-       // activeColor: Colors.orangeAccent,
+        // activeColor: Colors.orangeAccent,
         onTap: (int i) => setState(() {
           index = i;
         }),
