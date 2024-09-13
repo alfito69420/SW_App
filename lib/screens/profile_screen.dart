@@ -95,19 +95,22 @@ class ProfileScreen extends StatelessWidget {
               title: TextStrings.github,
               icon: Icon(Icons.web),
               onPress:() async {
-                final bool launched = await launchUrl(_githubUrl);
-                if (!launched) {
-                  // Puedes mostrar un Snackbar o un AlertDialog si el enlace no se abrió
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('No se pudo abrir el enlace')),
-                  );
-                }
+                _launchUrl(_githubUrl, context);
               },
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+Future<void> _launchUrl(Uri uri, BuildContext context) async {
+  if (!await launchUrl(uri)) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('No se pudo abrir el enlace')),
+    );
+    throw Exception('Could not launch $uri');
   }
 }
 
