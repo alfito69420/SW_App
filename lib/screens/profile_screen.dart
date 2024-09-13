@@ -11,8 +11,14 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultColorScheme = Theme.of(context).colorScheme;
-    final Uri _githubUrl = Uri.parse(TextStrings.github);
-    final Uri telefono = Uri.parse(TextStrings.telefono);
+    final Uri githubUrl = Uri.parse(TextStrings.github);
+    final Uri telefono = Uri.parse("tel:${TextStrings.telefono}");
+
+    final Uri email = Uri(
+      scheme: 'mailto',
+      path: TextStrings.email,
+      query: 'subject=Hola&body=Este es el cuerpo del mensaje',
+    );
     //final Uri whatsapp = Uri.parse(TextStrings.github);
 
     return SingleChildScrollView(
@@ -63,12 +69,12 @@ class ProfileScreen extends StatelessWidget {
               height: 20,
             ),
             const Divider(),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ProfileMenuWidget(
               title: TextStrings.nombre,
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               onPress: () {},
               endIcon: false,
             ),
@@ -77,25 +83,29 @@ class ProfileScreen extends StatelessWidget {
             ),
             ProfileMenuWidget(
               title: TextStrings.email,
-              icon: Icon(Icons.email),
-              onPress: () {},
+              icon: const Icon(Icons.email),
+              onPress: () {
+                _launchUrl(email, context);
+              },
             ),
             const SizedBox(
               height: 30,
             ),
             ProfileMenuWidget(
               title: TextStrings.telefono,
-              icon: Icon(Icons.phone),
-              onPress: () {},
+              icon: const Icon(Icons.phone),
+              onPress: () async {
+                _launchUrl(telefono, context);
+              },
             ),
             const SizedBox(
               height: 30,
             ),
             ProfileMenuWidget(
               title: TextStrings.github,
-              icon: Icon(Icons.web),
+              icon: const Icon(Icons.web),
               onPress:() async {
-                _launchUrl(_githubUrl, context);
+                _launchUrl(githubUrl, context);
               },
             ),
           ],
@@ -108,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
 Future<void> _launchUrl(Uri uri, BuildContext context) async {
   if (!await launchUrl(uri)) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('No se pudo abrir el enlace')),
+      const SnackBar(content: Text('No se pudo abrir el enlace o la aplicación.')),
     );
     throw Exception('Could not launch $uri');
   }
