@@ -1,25 +1,36 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:proyecto1/utils/image_strings.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proyecto1/utils/text_strings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../utils/material_theme.dart';
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  //  Handled Images
+  File? selectedImage;
+
+  //late final returnedPickedImage;
+
+  @override
   Widget build(BuildContext context) {
+    //  Colores
     final defaultColorScheme = Theme.of(context).colorScheme;
+
+    //  External App Uris
     final Uri githubUrl = Uri.parse(TextStrings.github);
     final Uri telefono = Uri.parse("tel:${TextStrings.telefono}");
-
     final Uri email = Uri(
       scheme: 'mailto',
       path: TextStrings.email,
       query: 'subject=Hola&body=Este es el cuerpo del mensaje',
     );
-    //final Uri whatsapp = Uri.parse(TextStrings.github);
 
     return SingleChildScrollView(
       child: Container(
@@ -33,7 +44,9 @@ class ProfileScreen extends StatelessWidget {
                   height: 120,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: const Image(image: AssetImage("assets/pfp.jpg"))),
+                      child: selectedImage != null
+                          ? Image.file(selectedImage!)
+                          : const Image(image: AssetImage("assets/pfp.jpg"))),
                 ),
                 Positioned(
                   bottom: 0,
@@ -45,10 +58,15 @@ class ProfileScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(100),
                       color: defaultColorScheme.primary,
                     ),
-                    child: Icon(
-                      Icons.camera_alt,
-                      size: 18.0,
-                      color: defaultColorScheme.onPrimary,
+                    child: IconButton(
+                      onPressed: () {
+                        showCameraGalleryOption(context);
+                      },
+                      icon: Icon(
+                        Icons.camera_alt,
+                        size: 18.0,
+                        color: defaultColorScheme.onPrimary,
+                      ),
                     ),
                   ),
                 )
@@ -104,7 +122,7 @@ class ProfileScreen extends StatelessWidget {
             ProfileMenuWidget(
               title: TextStrings.github,
               icon: const Icon(Icons.web),
-              onPress:() async {
+              onPress: () async {
                 _launchUrl(githubUrl, context);
               },
             ),
@@ -113,19 +131,100 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-Future<void> _launchUrl(Uri uri, BuildContext context) async {
-  if (!await launchUrl(uri)) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('No se pudo abrir el enlace o la aplicación.')),
+  Future _pickImageFromPhone() async {
+    final returnedPickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnedPickedImage != null) {
+      setState(() {
+        selectedImage = File(returnedPickedImage.path);
+      });
+    }
+  }
+
+  Future _pickImageFromCamera() async {
+    final returnedPickedImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (returnedPickedImage != null) {
+      setState(() {
+        selectedImage = File(returnedPickedImage.path);
+      });
+    }
+  }
+
+  Future showCameraGalleryOption(BuildContext context) async {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 7,
+            child: Column(
+              children: [
+                const Row(),
+                const SizedBox(
+                  height: 32,
+                ),
+                InkWell(
+                  onTap: () {
+                    _pickImageFromPhone();
+                    Navigator.pop(context);
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.storage,
+                        size: 30,
+                      ),
+                      Text("Galeria"),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                InkWell(
+                  onTap: () {
+                    _pickImageFromCamera();
+                    Navigator.pop(context);
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.camera,
+                        size: 30,
+                      ),
+                      Text("Camara")
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
-    throw Exception('Could not launch $uri');
+  }
+
+  Future<void> _launchUrl(Uri uri, BuildContext context) async {
+    if (!await launchUrl(uri)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('No se pudo abrir el enlace o la aplicación.')),
+      );
+      throw Exception('Could not launch $uri');
+    }
   }
 }
 
 class ProfileMenuWidget extends StatelessWidget {
-  ProfileMenuWidget(
+  const ProfileMenuWidget(
       {super.key,
       required this.title,
       required this.icon,
