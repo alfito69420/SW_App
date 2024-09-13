@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proyecto1/utils/text_strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -132,6 +133,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Guardar la ruta de la imagen en SharedPreferences
+  Future<void> _saveImagePath(String path) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profile_image_path', path);
+  }
+
+// Obtener la ruta de la imagen desde SharedPreferences
+  Future<String?> _loadImagePath() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('profile_image_path');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  // Cargar la imagen al iniciar la pantalla
+  void _loadImage() async {
+    String? imagePath = await _loadImagePath();
+    if (imagePath != null) {
+      setState(() {
+        selectedImage = File(imagePath);
+      });
+    }
+  }
+
   Future _pickImageFromPhone() async {
     final returnedPickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -140,6 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         selectedImage = File(returnedPickedImage.path);
       });
+      _saveImagePath(returnedPickedImage.path); // Guardar la ruta
     }
   }
 
@@ -151,6 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         selectedImage = File(returnedPickedImage.path);
       });
+      _saveImagePath(returnedPickedImage.path); // Guardar la ruta
     }
   }
 
