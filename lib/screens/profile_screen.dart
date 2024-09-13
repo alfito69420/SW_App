@@ -1,15 +1,37 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:proyecto1/utils/image_strings.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proyecto1/utils/text_strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../utils/material_theme.dart';
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  //  Handled Images
+  File? selectedImage;
+
+  //late final returnedPickedImage;
+
+  @override
   Widget build(BuildContext context) {
+    //  Colores
     final defaultColorScheme = Theme.of(context).colorScheme;
+
+    //  External App Uris
+    final Uri githubUrl = Uri.parse(TextStrings.github);
+    final Uri telefono = Uri.parse("tel:${TextStrings.telefono}");
+    final Uri email = Uri(
+      scheme: 'mailto',
+      path: TextStrings.email,
+      query: 'subject=Hola&body=Este es el cuerpo del mensaje',
+    );
 
     return SingleChildScrollView(
       child: Container(
@@ -23,7 +45,9 @@ class ProfileScreen extends StatelessWidget {
                   height: 120,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: const Image(image: AssetImage("assets/pfp.jpg"))),
+                      child: selectedImage != null
+                          ? Image.file(selectedImage!)
+                          : const Image(image: AssetImage("assets/pfp.jpg"))),
                 ),
                 Positioned(
                   bottom: 0,
@@ -35,10 +59,15 @@ class ProfileScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(100),
                       color: defaultColorScheme.primary,
                     ),
-                    child: const Icon(
-                      Icons.camera_alt,
-                      size: 18.0,
-                      color: Colors.black,
+                    child: IconButton(
+                      onPressed: () {
+                        showCameraGalleryOption(context);
+                      },
+                      icon: Icon(
+                        Icons.camera_alt,
+                        size: 18.0,
+                        color: defaultColorScheme.onPrimary,
+                      ),
                     ),
                   ),
                 )
@@ -59,12 +88,12 @@ class ProfileScreen extends StatelessWidget {
               height: 20,
             ),
             const Divider(),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ProfileMenuWidget(
               title: TextStrings.nombre,
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               onPress: () {},
               endIcon: false,
             ),
@@ -73,34 +102,160 @@ class ProfileScreen extends StatelessWidget {
             ),
             ProfileMenuWidget(
               title: TextStrings.email,
-              icon: Icon(Icons.email),
-              onPress: () {},
+              icon: const Icon(Icons.email),
+              onPress: () {
+                _launchUrl(email, context);
+              },
             ),
             const SizedBox(
               height: 30,
             ),
             ProfileMenuWidget(
               title: TextStrings.telefono,
-              icon: Icon(Icons.phone),
-              onPress: () {},
+              icon: const Icon(Icons.phone),
+              onPress: () async {
+                _launchUrl(telefono, context);
+              },
             ),
             const SizedBox(
               height: 30,
             ),
             ProfileMenuWidget(
               title: TextStrings.github,
-              icon: Icon(Icons.web),
-              onPress: () {},
+              icon: const Icon(Icons.web),
+              onPress: () async {
+                _launchUrl(githubUrl, context);
+              },
             ),
           ],
         ),
       ),
     );
   }
+
+  // Guardar la ruta de la imagen en SharedPreferences
+  Future<void> _saveImagePath(String path) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profile_image_path', path);
+  }
+
+// Obtener la ruta de la imagen desde SharedPreferences
+  Future<String?> _loadImagePath() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('profile_image_path');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  // Cargar la imagen al iniciar la pantalla
+  void _loadImage() async {
+    String? imagePath = await _loadImagePath();
+    if (imagePath != null) {
+      setState(() {
+        selectedImage = File(imagePath);
+      });
+    }
+  }
+
+  Future _pickImageFromPhone() async {
+    final returnedPickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnedPickedImage != null) {
+      setState(() {
+        selectedImage = File(returnedPickedImage.path);
+      });
+      _saveImagePath(returnedPickedImage.path); // Guardar la ruta
+    }
+  }
+
+  Future _pickImageFromCamera() async {
+    final returnedPickedImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (returnedPickedImage != null) {
+      setState(() {
+        selectedImage = File(returnedPickedImage.path);
+      });
+      _saveImagePath(returnedPickedImage.path); // Guardar la ruta
+    }
+  }
+
+  Future showCameraGalleryOption(BuildContext context) async {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 7,
+            child: Column(
+              children: [
+                const Row(),
+                const SizedBox(
+                  height: 32,
+                ),
+                InkWell(
+                  onTap: () {
+                    _pickImageFromPhone();
+                    Navigator.pop(context);
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.storage,
+                        size: 30,
+                      ),
+                      Text("Galeria"),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                InkWell(
+                  onTap: () {
+                    _pickImageFromCamera();
+                    Navigator.pop(context);
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.camera,
+                        size: 30,
+                      ),
+                      Text("Camara")
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _launchUrl(Uri uri, BuildContext context) async {
+    if (!await launchUrl(uri)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('No se pudo abrir el enlace o la aplicación.')),
+      );
+      throw Exception('Could not launch $uri');
+    }
+  }
 }
 
 class ProfileMenuWidget extends StatelessWidget {
-  ProfileMenuWidget(
+  const ProfileMenuWidget(
       {super.key,
       required this.title,
       required this.icon,
