@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto1/utils/image_strings.dart';
 import 'package:proyecto1/utils/text_strings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/material_theme.dart';
 
@@ -10,6 +11,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultColorScheme = Theme.of(context).colorScheme;
+    final Uri _githubUrl = Uri.parse(TextStrings.github);
+    final Uri telefono = Uri.parse(TextStrings.telefono);
+    //final Uri whatsapp = Uri.parse(TextStrings.github);
 
     return SingleChildScrollView(
       child: Container(
@@ -35,10 +39,10 @@ class ProfileScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(100),
                       color: defaultColorScheme.primary,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.camera_alt,
                       size: 18.0,
-                      color: Colors.black,
+                      color: defaultColorScheme.onPrimary,
                     ),
                   ),
                 )
@@ -90,7 +94,15 @@ class ProfileScreen extends StatelessWidget {
             ProfileMenuWidget(
               title: TextStrings.github,
               icon: Icon(Icons.web),
-              onPress: () {},
+              onPress:() async {
+                final bool launched = await launchUrl(_githubUrl);
+                if (!launched) {
+                  // Puedes mostrar un Snackbar o un AlertDialog si el enlace no se abrió
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No se pudo abrir el enlace')),
+                  );
+                }
+              },
             ),
           ],
         ),
