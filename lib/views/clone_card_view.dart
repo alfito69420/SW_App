@@ -3,8 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:proyecto1/models/clon.dart';
 
-import '../utils/colors_settings.dart';
-
 class CloneCardView extends StatelessWidget {
   Clone clone;
   double pageOffset;
@@ -20,7 +18,7 @@ class CloneCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double cardWidth = size.width - 60;
-    double cardHeight = size.height * .55;
+    double cardHeight = size.height * .50;
     double count = 0;
     double page;
     rotate = index - pageOffset;
@@ -39,18 +37,18 @@ class CloneCardView extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: <Widget>[
-        buildTopText(),
+        buildTopText(context),
         buildBackgroundImage(cardWidth, cardHeight, size),
         buildAboveCard(cardWidth, cardHeight, size),
         buildCupImage(size),
-        buildBlurImage(cardWidth, size),
-        buildSmallImage(size),
-        buildTopImage(cardWidth, size, cardHeight),
+        //buildBlurImage(cardWidth, size),
+        //buildSmallImage(size),
+        //buildTopImage(cardWidth, size, cardHeight),
       ],
     );
   }
 
-  Widget buildTopText() {
+  Widget buildTopText(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
       child: Row(
@@ -58,19 +56,25 @@ class CloneCardView extends StatelessWidget {
           const SizedBox(
             width: 20,
           ),
-          Text(
-            clone.name,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 50,
-                color: clone.lightColor),
+          Expanded(
+            child: Text(
+              clone.name,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width *
+                      0.1, // Ajustar dinámicamente,
+                  color: clone.lightColor),
+            ),
           ),
-          Text(
-            clone.conName,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 50,
-                color: clone.darkColor),
+          Expanded(
+            child: Text(
+              clone.conName,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width *
+                      0.08, // Ajustar dinámicamente,
+                  color: clone.darkColor),
+            ),
           )
         ],
       ),
@@ -116,7 +120,7 @@ class CloneCardView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   const Text(
-                    'Yakult',
+                    'Clone',
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
@@ -126,23 +130,19 @@ class CloneCardView extends StatelessWidget {
                   Container(
                     height: 40,
                     decoration: BoxDecoration(
-                        color: ColorsSettings.mAppGreen,
+                        color: Color(4281887036),
                         borderRadius: BorderRadius.circular(20)),
                     child: const Row(children: <Widget>[
                       SizedBox(
                         width: 10,
                       ),
                       Text(
-                        '\$ 4',
+                        'trooper',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
-                      ),
-                      Text(
-                        '.70',
-                        style: TextStyle(fontSize: 17, color: Colors.white),
                       ),
                       SizedBox(
                         width: 10,
@@ -159,56 +159,6 @@ class CloneCardView extends StatelessWidget {
                 style: const TextStyle(color: Colors.white70, fontSize: 18),
               ),
               const Spacer(),
-              // Row(
-              //   crossAxisAlignment: CrossAxisAlignment.end,
-              //   children: <Widget>[
-              //     SizedBox(
-              //       width: 5,
-              //     ),
-              //     Image.asset('assets/coffeeChallenge/cup_L.png'),
-              //     SizedBox(
-              //       width: 5,
-              //     ),
-              //     Image.asset('assets/coffeeChallenge/cup_M.png'),
-              //     SizedBox(
-              //       width: 5,
-              //     ),
-              //     Image.asset('assets/coffeeChallenge/cup_s.png'),
-              //   ],
-              // ),
-              // SizedBox(
-              //   height: 15,
-              // ),
-              // Container(
-              //   height: 40,
-              //   decoration: BoxDecoration(
-              //       color: mAppGreen, borderRadius: BorderRadius.circular(20)),
-              //   child: const Center(
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.end,
-              //       children: <Widget>[
-              //         SizedBox(
-              //           width: 20,
-              //         ),
-              //         Text(
-              //           '\$',
-              //           style: TextStyle(fontSize: 20, color: Colors.white),
-              //         ),
-              //         SizedBox(
-              //           width: 10,
-              //         ),
-              //         Text(
-              //           '4.',
-              //           style: TextStyle(fontSize: 19, color: Colors.white),
-              //         ),
-              //         Text(
-              //           '70',
-              //           style: TextStyle(fontSize: 14, color: Colors.white),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // )
             ],
           ),
         ),
