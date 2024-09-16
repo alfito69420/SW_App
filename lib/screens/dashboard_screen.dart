@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:proyecto1/screens/clon_screen.dart';
 import 'package:proyecto1/screens/home_screen.dart';
 import 'package:proyecto1/screens/profile_screen.dart';
 import 'package:proyecto1/utils/global_vales.dart';
@@ -58,7 +59,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         {
           switch (index) {
             case 0:
-              return const HomeScreen();
+              //return const HomeScreen();
+              return const CloneScreen();
             case 1:
               return const ProfileScreen();
             //case 2: const;
