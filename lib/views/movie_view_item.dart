@@ -14,7 +14,7 @@ class _MovieViewItemState extends State<MovieViewItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(widget.moviesDao.nameMovie!),
+      ///child: Text(widget.moviesDao.nameMovie!),
     );
   }
 }

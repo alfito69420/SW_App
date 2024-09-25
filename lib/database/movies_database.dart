@@ -41,7 +41,7 @@ Future<Database> initDatabase() async{
           overview TEXT,
           idGenre CHAR(1),
           imgMovie VARCHAR(150),
-          releaseDate CHAR(10)
+          releaseDate CHAR(10),
           CONSTRAINT fk_movie_genre FOREIGN KEY (idGenre) REFERENCES tblgenre (idGenre)
         );''';
         db.execute(query2);
@@ -72,7 +72,7 @@ Future<Database> initDatabase() async{
 
   Future<List<MoviesDao>> SELECT() async {
     var con = await database;
-    var result = await con.query('tbl_movies');
+    var result = await con.query('tblmovies');
     return result
         .map(
           (movie) => MoviesDao.fromMap(movie),

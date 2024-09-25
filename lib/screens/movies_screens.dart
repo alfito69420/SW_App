@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto1/database/movies_database.dart';
 import 'package:proyecto1/models/movies_dao.dart';
+import 'package:proyecto1/views/movie_view.dart';
 import 'package:proyecto1/views/movie_view_item.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -20,18 +21,20 @@ class _MoviesScreenState extends State<MoviesScreen> {
     moviesDB = MoviesDatabase();
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Movies List'),
+        title: const Text('Movies List'),
         actions: [
           IconButton(
               onPressed: () {
                 WoltModalSheet.show(
                   context: context,
                   pageListBuilder: (context) =>
-                      [WoltModalSheetPage(child: Text('SASIasdiaow'))],
+                      [WoltModalSheetPage(child: MovieView())],
                 );
               },
               icon: const Icon(Icons.add)),
@@ -43,14 +46,13 @@ class _MoviesScreenState extends State<MoviesScreen> {
             if (snapshot.hasData) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  return MovieViewItem(moviesDao: snapshot.data![index]);
+                  //return MovieViewItem(moviesDao: snapshot.data![index]);
                 },
               );
             } else {
               if (snapshot.hasError) {
-                return const Center(
-                  child: Text("Something went Wrong! :("),
-                );
+                print(snapshot.toString());
+                return const Text("Algo salió mal :(");
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
