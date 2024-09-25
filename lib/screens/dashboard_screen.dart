@@ -103,6 +103,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         children: [
           FloatingActionButton.small(
+            heroTag: "btn2",
             onPressed: () {
               GlobalValues.flagThemeDark.value = false;
             },

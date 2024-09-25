@@ -19,34 +19,36 @@ class MoviesDatabase {
     return _database = await initDatabase();
   }
 
-  Future<Database> initDatabase() async {
-    Directory folder = await getApplicationDocumentsDirectory();
 
-    String path = join(folder.path, NAMEDB);
-
+Future<Database> initDatabase() async{
+    Directory folder =  await getApplicationDocumentsDirectory();
+    String path = join(folder.path,NAMEDB);
     return openDatabase(
       path,
       version: VERSIONDB,
       onCreate: (db, version) {
-        String query = '''
-          CREATE TABLE tbl_genre(
-            id_genre CHAR(1),
-            dsc_genre VARCHAR(50)
-          )
-
-          CREATE TABLE tbl_movies(
-            id_movie INTEGER PRIMARY KEY,
-            name_movie VARCHAR(255),
-            over_view TEXT,
-            id_genre CHAR(1),
-            img_movie VARCHAR(150),
-            release_date CHAR(10),
-            CONSTRAINT fk_gen FOREIGN KEY(id_genre) REFERENCES tbl_genre(id_genre) 
-        )''';
-        db.execute(query);
+        String query1 = '''
+        CREATE TABLE tblgenre(
+          idGenre CHAR(1) PRIMARY KEY,
+          dscgenre VARCHAR(50)
+        );
+        ''';
+        db.execute(query1);
+        String query2 = '''
+        CREATE TABLE tblmovies(
+          idMovie INTEGER PRIMARY KEY,
+          nameMovie VARCHAR(100),
+          overview TEXT,
+          idGenre CHAR(1),
+          imgMovie VARCHAR(150),
+          releaseDate CHAR(10)
+          CONSTRAINT fk_movie_genre FOREIGN KEY (idGenre) REFERENCES tblgenre (idGenre)
+        );''';
+        db.execute(query2);
       },
     );
-  } //  close method
+  }
+
 
   Future<int> INSERT(String table, Map<String, dynamic> row) async {
     var con = await database;
