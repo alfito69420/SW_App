@@ -21,10 +21,10 @@ class _MoviesScreenState extends State<MoviesScreen> {
     moviesDB = MoviesDatabase();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
+    final defaultColorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Movies List'),
@@ -34,7 +34,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                 WoltModalSheet.show(
                   context: context,
                   pageListBuilder: (context) =>
-                      [WoltModalSheetPage(child: MovieView())],
+                      [WoltModalSheetPage(child: const MovieView())],
                 );
               },
               icon: const Icon(Icons.add)),
@@ -46,13 +46,13 @@ class _MoviesScreenState extends State<MoviesScreen> {
             if (snapshot.hasData) {
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  //return MovieViewItem(moviesDao: snapshot.data![index]);
+                  return MovieViewItem(moviesDao: snapshot.data![index]);
                 },
               );
             } else {
               if (snapshot.hasError) {
-                print(snapshot.toString());
-                return const Text("Algo salió mal :(");
+                //print(snapshot.toString());
+                return const Center(child: Text("Algo salió mal :("));
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
