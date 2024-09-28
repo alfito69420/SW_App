@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto1/database/movies_database.dart';
 import 'package:proyecto1/models/movies_dao.dart';
-import 'package:proyecto1/views/movie_view.dart';
+import 'package:proyecto1/views/movie_form_view.dart';
 import 'package:proyecto1/views/movie_view_item.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -42,9 +42,16 @@ class _MoviesScreenState extends State<MoviesScreen> {
       ),
       body: FutureBuilder(
           future: moviesDB.SELECT(),
-          builder: (context, AsyncSnapshot<List<MoviesDao>> snapshot) {
+          builder: (context, AsyncSnapshot<List<MoviesDAO>?> snapshot) {
             if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return const Center(
+                    child:
+                        Text("No hay películas disponibles por el momento."));
+              }
+
               return ListView.builder(
+                itemCount: snapshot.data!.length, // Especifica el itemCount
                 itemBuilder: (context, index) {
                   return MovieViewItem(moviesDao: snapshot.data![index]);
                 },

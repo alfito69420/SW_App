@@ -5,10 +5,12 @@ import 'package:proyecto1/utils/image_strings.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
+import '../utils/global_vales.dart';
+
 class MovieViewItem extends StatefulWidget {
   MovieViewItem({super.key, required this.moviesDao});
 
-  MoviesDao moviesDao;
+  MoviesDAO moviesDao;
 
   @override
   State<MovieViewItem> createState() => _MovieViewItemState();
@@ -35,54 +37,56 @@ class _MovieViewItemState extends State<MovieViewItem> {
         borderRadius: BorderRadius.circular(18),
         color: defaultColorScheme.secondary,
       ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Image.network(
-                ImageStrings.movieImgTest,
-                height: 100,
+      child: Column(children: [
+        Row(
+          children: [
+            Image.network(
+              ImageStrings.movieImgTest,
+              height: 100,
+            ),
+            Expanded(
+              child: ListTile(
+                title: Text(widget.moviesDao.nameMovie ?? 'Sin título'),
+                // Maneja el null
+                subtitle: Text(widget.moviesDao.releaseDate ??
+                    'Sin fecha'), // Maneja el null
               ),
-              Expanded(
-                child: ListTile(
-                  title: Text(widget.moviesDao.nameMovie!),
-                  subtitle: Text(widget.moviesDao.releaseDate!),
-                ),
-              ),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
-              IconButton(
-                  onPressed: () {
-                    moviesDatabase!
-                        .DELETE("tblmovies", widget.moviesDao.idMovie!)
-                        .then(
-                      (value) {
-                        if (value > 0) {
-                          //Navigator.pop(context);
-                          return QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.success,
-                              text: 'Película eliminada con éxito.',
-                              showConfirmBtn: false,
-                              autoCloseDuration: const Duration(seconds: 2));
-                        } else {
-                          //Navigator.pop(context);
-                          return QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.error,
-                              text: 'No fue posible eliminar la película.',
-                              showConfirmBtn: false,
-                              autoCloseDuration: const Duration(seconds: 2));
-                        }
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.delete)),
-            ],
-          ),
-          const Divider(),
-          Text(widget.moviesDao.overView!),
-        ],
-      ),
+            ),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
+            IconButton(
+                onPressed: () {
+                  moviesDatabase!
+                      .DELETE("tblmovies", widget.moviesDao.idMovie!)
+                      .then(
+                    (value) {
+                      if (value > 0) {
+                        GlobalValues.banUpdListMovies.value =
+                            !GlobalValues.banUpdListMovies.value;
+                        //Navigator.pop(context);
+                        return QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.success,
+                            text: 'Película eliminada con éxito.',
+                            showConfirmBtn: true,
+                            autoCloseDuration: const Duration(seconds: 2));
+                      } else {
+                        //Navigator.pop(context);
+                        return QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.error,
+                            text: 'No fue posible eliminar la película.',
+                            showConfirmBtn: true,
+                            autoCloseDuration: const Duration(seconds: 2));
+                      }
+                    },
+                  );
+                },
+                icon: const Icon(Icons.delete)),
+          ],
+        ),
+        const Divider(),
+        Text(widget.moviesDao.overview ?? 'Sin descripción'),
+      ]),
     );
   }
 }
