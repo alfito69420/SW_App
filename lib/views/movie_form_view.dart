@@ -1,29 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:proyecto1/database/movies_database.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
+import '../database/movies_database.dart';
+import '../models/movies_dao.dart';
+import '../utils/global_vales.dart';
+
 class MovieView extends StatefulWidget {
-  const MovieView({super.key});
+  MovieView({super.key, this.moviesDAO});
+
+  MoviesDAO? moviesDAO;
 
   @override
   State<MovieView> createState() => _MovieViewState();
 }
 
 class _MovieViewState extends State<MovieView> {
-  TextEditingController txtConName = TextEditingController();
-  TextEditingController txtConOverView = TextEditingController();
-  TextEditingController txtConImageMovie = TextEditingController();
-  TextEditingController txtConRelease = TextEditingController();
-  MoviesDatabase? moviesDB;
+  TextEditingController conName = TextEditingController();
+  TextEditingController conOverview = TextEditingController();
+  TextEditingController conImgMovie = TextEditingController();
+  TextEditingController conRelease = TextEditingController();
+  MoviesDatabase? moviesDatabase;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    moviesDatabase = MoviesDatabase();
 
-    moviesDB = MoviesDatabase();
+    if (widget.moviesDAO != null) {
+      conName.text = widget.moviesDAO!.nameMovie!;
+      conOverview.text = widget.moviesDAO!.overview!;
+      conImgMovie.text = widget.moviesDAO!.imgMovie!;
+      conRelease.text = widget.moviesDAO!.releaseDate!;
+    }
   }
 
   @override
@@ -31,86 +41,85 @@ class _MovieViewState extends State<MovieView> {
     final defaultColorScheme = Theme.of(context).colorScheme;
 
     final txtNameMovie = TextFormField(
-      controller: txtConName,
-      decoration: const InputDecoration(hintText: "Nombre de la película"),
+      controller: conName,
+      decoration: const InputDecoration(hintText: 'Nombre de la película'),
     );
-    final txtOverView = TextFormField(
-      controller: txtConOverView,
+    final txtOverview = TextFormField(
+      controller: conOverview,
       maxLines: 5,
-      decoration: const InputDecoration(hintText: "Sinápsis de la película"),
+      decoration: const InputDecoration(hintText: 'Sinapsis de la película'),
     );
-    final txtImageMovie = TextFormField(
-      controller: txtConImageMovie,
-      decoration: const InputDecoration(hintText: "Poster de la película"),
+    final txtImgMovie = TextFormField(
+      controller: conImgMovie,
+      decoration: const InputDecoration(hintText: 'Poster de la película'),
     );
-    final txtRelease = TextField(
+    final txtRelease = TextFormField(
       readOnly: true,
-      controller: txtConRelease,
+      controller: conRelease,
+      decoration: const InputDecoration(hintText: 'Fecha de lanzamiento'),
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
             context: context,
             initialDate: DateTime.now(),
-            firstDate: DateTime(2000),
+            firstDate: DateTime(2024),
             lastDate: DateTime(2050));
 
         if (pickedDate != null) {
           String formatDate = DateFormat('dd-MM-yyyy').format(pickedDate);
-          txtConRelease.text = formatDate;
-
+          conRelease.text = formatDate;
           setState(() {});
-        } else {}
+        }
       },
-      decoration: const InputDecoration(hintText: "Fecha de lanzamiento"),
     );
 
     final btnSave = ElevatedButton(
       onPressed: () {
-        moviesDB!.INSERT("tblmovies", {
-          "nameMovie": txtConName.text,
-          "overview": txtConOverView.text,
+        moviesDatabase!.INSERT('tblmovies', {
+          "nameMovie": conName.text,
+          "overview": conOverview.text,
           "idGenre": 1,
-          "imgMovie": txtConImageMovie.text,
-          "releaseDate": txtConRelease.text,
-        }).then(
-          (value) {
-            if (value > 0) {
-              Navigator.pop(context);
-              return QuickAlert.show(
-                context: context,
-                type: QuickAlertType.success,
-                text: 'Película agregada con éxito.',
-                showConfirmBtn: false,
-                autoCloseDuration: const Duration(seconds: 2)
-                
-              );
-              
-            } else {
-              Navigator.pop(context);
-              return QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                text: 'No fue posible agregar la película.',
-                showConfirmBtn: false,
-                autoCloseDuration: const Duration(seconds: 2)
-              );
-            }
-          },
-        );
+          "imgMovie": conImgMovie.text,
+          "releaseDate": conRelease.text
+        }).then((value) {
+          if (value > 0) {
+            GlobalValues.banUpdListMovies.value =
+                !GlobalValues.banUpdListMovies.value;
+
+            Navigator.pop(context);
+            return QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              text: 'Pelicula agregada con exito!',
+              autoCloseDuration: const Duration(seconds: 2),
+              showConfirmBtn: true,
+            );
+          } else {
+            Navigator.pop(context);
+            return QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: 'No se pudo agregar la pelicula! :()',
+              autoCloseDuration: const Duration(seconds: 2),
+              showConfirmBtn: true,
+            );
+          }
+        });
       },
       style:
           ElevatedButton.styleFrom(backgroundColor: defaultColorScheme.primary),
-      child: const Text(
-        "Guardar",
+      child: Text(
+        'Guardar',
+        style: TextStyle(color: defaultColorScheme.onPrimary),
       ),
     );
 
     return ListView(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(10),
       shrinkWrap: true,
       children: [
         txtNameMovie,
-        txtOverView,
-        txtImageMovie,
+        txtOverview,
+        txtImgMovie,
         txtRelease,
         const SizedBox(
           height: 30,

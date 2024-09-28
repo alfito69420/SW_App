@@ -35,7 +35,7 @@ class _MovieViewItemState extends State<MovieViewItem> {
       height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        color: defaultColorScheme.secondary,
+        color: defaultColorScheme.primary,
       ),
       child: Column(children: [
         Row(
@@ -46,14 +46,24 @@ class _MovieViewItemState extends State<MovieViewItem> {
             ),
             Expanded(
               child: ListTile(
-                title: Text(widget.moviesDao.nameMovie ?? 'Sin título'),
-                // Maneja el null
-                subtitle: Text(widget.moviesDao.releaseDate ??
-                    'Sin fecha'), // Maneja el null
+                title: Text(
+                  widget.moviesDao.nameMovie ?? 'Sin título',
+                  style: TextStyle(color: defaultColorScheme.onPrimary),
+                ),
+                subtitle: Text(
+                  widget.moviesDao.releaseDate ?? 'Sin fecha',
+                  style: TextStyle(color: defaultColorScheme.onPrimary),
+                ),
               ),
             ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
             IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.edit,
+                  color: defaultColorScheme.onPrimary,
+                )),
+            IconButton(
+                color: defaultColorScheme.onPrimary,
                 onPressed: () {
                   moviesDatabase!
                       .DELETE("tblmovies", widget.moviesDao.idMovie!)
@@ -62,7 +72,6 @@ class _MovieViewItemState extends State<MovieViewItem> {
                       if (value > 0) {
                         GlobalValues.banUpdListMovies.value =
                             !GlobalValues.banUpdListMovies.value;
-                        //Navigator.pop(context);
                         return QuickAlert.show(
                             context: context,
                             type: QuickAlertType.success,
@@ -70,7 +79,6 @@ class _MovieViewItemState extends State<MovieViewItem> {
                             showConfirmBtn: true,
                             autoCloseDuration: const Duration(seconds: 2));
                       } else {
-                        //Navigator.pop(context);
                         return QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
@@ -85,7 +93,10 @@ class _MovieViewItemState extends State<MovieViewItem> {
           ],
         ),
         const Divider(),
-        Text(widget.moviesDao.overview ?? 'Sin descripción'),
+        Text(
+          widget.moviesDao.overview ?? 'Sin descripción',
+          style: TextStyle(color: defaultColorScheme.onPrimary),
+        ),
       ]),
     );
   }
