@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto1/screens/dashboard_screen.dart';
 import 'package:proyecto1/screens/login_screen.dart';
+import 'package:proyecto1/screens/movies_screens.dart';
 import 'package:proyecto1/utils/material_theme.dart';
 import 'package:proyecto1/utils/global_vales.dart';
 //import 'package:proyecto1/utils/theme_settings.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
                 : const MaterialTheme(TextTheme()).light(), // Esquema claro
             routes: {
               "/home": (context) => const DashboardScreen(),
+              "/movies": (context) => const MoviesScreen(),
             },
             debugShowCheckedModeBanner: false,
           );
