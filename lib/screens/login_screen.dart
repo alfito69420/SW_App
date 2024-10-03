@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Future.delayed(const Duration(milliseconds: 1000)).then((value) => {
                 isLoading = false,
                 setState(() {}),
-                Navigator.pushNamed(context, "/home")
+                Navigator.pushNamed(context, "/onboarding")
               });
         },
         child: Text(
