@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto1/screens/clon_screen.dart';
 import 'package:proyecto1/screens/dashboard_screen.dart';
 import 'package:proyecto1/screens/login_screen.dart';
 import 'package:proyecto1/screens/movies_screens.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
                 "/onboarding": (context) => const OnBoardingScreen(),
                 "/preferences": (context) => const PreferencesScreen(),
                 "/preferences_drawer": (context) => const PreferencesDrawerScreen(),
+                "/clone": (context) => const CloneScreen(),
               },
               debugShowCheckedModeBanner: false,
             );

@@ -157,6 +157,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             leading: const Icon(Icons.room_preferences),
             trailing: const Icon(Icons.arrow_forward_ios_sharp),
           ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, "/clone");
+            },
+            title: const Text("CloneWars"),
+            subtitle: const Text("Challenge"),
+            leading: const Icon(Icons.coffee),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
+          ),
         ],
       ),
     );
