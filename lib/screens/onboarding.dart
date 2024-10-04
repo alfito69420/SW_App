@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:proyecto1/screens/dashboard_screen.dart';
+import 'package:proyecto1/screens/preferences_screen.dart';
 
 import '../utils/onboarding_content.dart';
 
@@ -96,7 +97,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const DashboardScreen(),
+                      builder: (_) => const PreferencesScreen(),
                     ),
                   );
                 }

@@ -3,10 +3,9 @@ import 'package:proyecto1/screens/dashboard_screen.dart';
 import 'package:proyecto1/screens/login_screen.dart';
 import 'package:proyecto1/screens/movies_screens.dart';
 import 'package:proyecto1/screens/onboarding.dart';
-import 'package:proyecto1/utils/material_theme.dart';
+import 'package:proyecto1/screens/preferences_screen.dart';
 import 'package:proyecto1/utils/global_vales.dart';
-//import 'package:proyecto1/utils/theme_settings.dart';
-//import '';
+import 'package:proyecto1/utils/material_theme.dart';
 
 void main() => runApp(const MyApp());
 
@@ -16,22 +15,40 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: GlobalValues.flagThemeDark,
-        builder: (context, value, child) {
-          return MaterialApp(
-            title: 'SW App',
-            //backgroundColor: defaultColorScheme.primaryContainer,
-            home: const LoginScreen(),
-            theme: value
-                ? const MaterialTheme(TextTheme()).dark()  // Esquema oscuro
-                : const MaterialTheme(TextTheme()).light(), // Esquema claro
-            routes: {
-              "/home": (context) => const DashboardScreen(),
-              "/movies": (context) => const MoviesScreen(),
-              "/onboarding": (context) => const OnBoardingScreen(),
-            },
-            debugShowCheckedModeBanner: false,
-          );
-        });
+      valueListenable: GlobalValues.flagThemeDark,
+      builder: (context, isDarkTheme, child) {
+        return ValueListenableBuilder(
+          valueListenable: GlobalValues.selectedFontFamily,
+          builder: (context, selectedFontFamily, child) {
+            return MaterialApp(
+              title: 'Movies App',
+              home: const LoginScreen(),
+              theme: isDarkTheme
+                  ? MaterialTheme(_buildTextTheme(selectedFontFamily)).dark()
+                  : MaterialTheme(_buildTextTheme(selectedFontFamily)).light(),
+              routes: {
+                "/home": (context) => const DashboardScreen(),
+                "/movies": (context) => const MoviesScreen(),
+                "/onboarding": (context) => const OnBoardingScreen(),
+                "/preferences": (context) => const PreferencesScreen(),
+              },
+              debugShowCheckedModeBanner: false,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  TextTheme _buildTextTheme(String fontFamily) {
+    return TextTheme(
+      bodySmall: TextStyle(fontFamily: fontFamily),
+      bodyMedium: TextStyle(fontFamily: fontFamily),
+      bodyLarge: TextStyle(fontFamily: fontFamily),
+      headlineSmall: TextStyle(fontFamily: fontFamily),
+      headlineMedium: TextStyle(fontFamily: fontFamily),
+      headlineLarge: TextStyle(fontFamily: fontFamily),
+      // Añade más estilos si es necesario
+    );
   }
 }
