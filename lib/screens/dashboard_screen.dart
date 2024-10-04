@@ -80,6 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           index = i;
         }),
       ),
+      /*
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         // No necesitas clave aquí para el FAB
@@ -124,7 +125,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ],
-      ),
+      ),*/
     );
   }
 

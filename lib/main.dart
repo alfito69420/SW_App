@@ -18,7 +18,10 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? selectedFont = prefs.getString('selectedFont');
 
+  bool? selectedTheme = prefs.getBool('selectedTheme');
+
   GlobalValues.selectedFontFamily.value = selectedFont ?? 'Arimo';
+  GlobalValues.flagThemeDark.value = selectedTheme ?? true;
 
   runApp(const MyApp());
 }

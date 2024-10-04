@@ -17,7 +17,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   @override
   void initState() {
     super.initState();
-    _loadSelectedFont();  // Cargar la fuente al iniciar la pantalla
+    _loadSelectedFont(); // Cargar la fuente al iniciar la pantalla
   }
 
   String? selectedFont = 'Arimo';
@@ -55,6 +55,11 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     await prefs.setString('selectedFont', font);
   }
 
+  Future<void> _saveSelectedTheme(bool theme) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('selectedTheme', theme);
+  }
+
   Future<void> _loadSelectedFont() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? font = prefs.getString('selectedFont');
@@ -62,7 +67,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     if (font != null) {
       setState(() {
         selectedValue = font;
-        GlobalValues.selectedFontFamily.value = font;  // Actualiza también el ValueNotifier global
+        GlobalValues.selectedFontFamily.value =
+            font; // Actualiza también el ValueNotifier global
       });
     }
   }
@@ -81,10 +87,30 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               "Escoge el tema que mas te agrade",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            themeButton("Tema Luminoso", Colors.white, Colors.black, ""),
-            themeButton("Tema Oscuro", Colors.black, Colors.white, ""),
-            themeButton("Tema Personalizado", defaultColorScheme.secondary,
-                defaultColorScheme.onSecondary, ""),
+            themeButton(
+              "Tema Luminoso",
+              Colors.white,
+              Colors.black,
+              () {
+                GlobalValues.flagThemeDark.value = false;
+                _saveSelectedTheme(false);
+              },
+            ),
+            themeButton(
+              "Tema Oscuro",
+              Colors.black,
+              Colors.white,
+              () {
+                GlobalValues.flagThemeDark.value = true;
+                _saveSelectedTheme(true);
+              },
+            ),
+            themeButton(
+              "Tema Personalizado",
+              defaultColorScheme.secondary,
+              defaultColorScheme.onSecondary,
+              () {},
+            ),
             const SizedBox(
               height: 50,
             ),
@@ -108,8 +134,14 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             const SizedBox(
               height: 90,
             ),
-            themeButton("Finalizar Configuracion", defaultColorScheme.primary,
-                defaultColorScheme.onPrimary, "/home"),
+            themeButton(
+              "Finalizar Configuracion",
+              defaultColorScheme.primary,
+              defaultColorScheme.onPrimary,
+              () {
+                Navigator.pushNamed(context, "/home");
+              },
+            ),
           ],
         ),
       ),
@@ -117,13 +149,15 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   }
 
   ElevatedButton themeButton(
-      String tema, Color esquema, Color colorTexto, String? ruta) {
+      String tema, Color esquema, Color colorTexto, VoidCallback onPress) {
     return ElevatedButton(
-        onPressed: () {
+        onPressed:
+            onPress /*() {
           if (ruta!.isNotEmpty) {
             Navigator.pushNamed(context, ruta);
           }
-        },
+        }*/
+        ,
         style: ElevatedButton.styleFrom(
           backgroundColor: esquema,
         ),
