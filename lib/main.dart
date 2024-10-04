@@ -3,6 +3,7 @@ import 'package:proyecto1/screens/dashboard_screen.dart';
 import 'package:proyecto1/screens/login_screen.dart';
 import 'package:proyecto1/screens/movies_screens.dart';
 import 'package:proyecto1/screens/onboarding.dart';
+import 'package:proyecto1/screens/preferences_drawer_screen.dart';
 import 'package:proyecto1/screens/preferences_screen.dart';
 import 'package:proyecto1/utils/global_vales.dart';
 import 'package:proyecto1/utils/material_theme.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
                 "/movies": (context) => const MoviesScreen(),
                 "/onboarding": (context) => const OnBoardingScreen(),
                 "/preferences": (context) => const PreferencesScreen(),
+                "/preferences_drawer": (context) => const PreferencesDrawerScreen(),
               },
               debugShowCheckedModeBanner: false,
             );

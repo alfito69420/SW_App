@@ -50,13 +50,11 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     ];
   }
 
-  // Guardar la fuente seleccionada en SharedPreferences
   Future<void> _saveSelectedFont(String font) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('selectedFont', font);
   }
 
-  // Cargar la fuente seleccionada desde SharedPreferences
   Future<void> _loadSelectedFont() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? font = prefs.getString('selectedFont');
@@ -103,7 +101,6 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 });
                 // Actualiza la fuente seleccionada globalmente
                 GlobalValues.selectedFontFamily.value = selectedValue!;
-                // Guardar la selección en SharedPreferences
                 _saveSelectedFont(selectedValue!);
               },
               hint: const Text('Seleccione una fuente.'),

@@ -143,10 +143,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onTap: () {
               Navigator.pushNamed(context, "/movies");
             },
-            title: const Text("Pelicula"),
-            subtitle: const Text("lorem ipsum"),
+            title: const Text("Peliculas"),
+            //subtitle: const Text("lorem ipsum"),
             leading: const Icon(Icons.movie),
-            trailing: const Icon(Icons.arrow_right_alt),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, "/preferences_drawer");
+            },
+            title: const Text("Preferencias"),
+            subtitle: const Text("Tema / Fuente"),
+            leading: const Icon(Icons.room_preferences),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
           ),
         ],
       ),
