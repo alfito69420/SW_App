@@ -6,8 +6,20 @@ import 'package:proyecto1/screens/onboarding.dart';
 import 'package:proyecto1/screens/preferences_screen.dart';
 import 'package:proyecto1/utils/global_vales.dart';
 import 'package:proyecto1/utils/material_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const MyApp());
+//void main() => runApp(const MyApp());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? selectedFont = prefs.getString('selectedFont');
+
+  GlobalValues.selectedFontFamily.value = selectedFont ?? 'Arimo';
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,7 +60,6 @@ class MyApp extends StatelessWidget {
       headlineSmall: TextStyle(fontFamily: fontFamily),
       headlineMedium: TextStyle(fontFamily: fontFamily),
       headlineLarge: TextStyle(fontFamily: fontFamily),
-      // Añade más estilos si es necesario
     );
   }
 }
