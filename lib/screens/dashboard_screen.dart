@@ -1,11 +1,8 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:proyecto1/screens/clon_screen.dart';
 import 'package:proyecto1/screens/home_screen.dart';
+import 'package:proyecto1/screens/login_screen.dart';
 import 'package:proyecto1/screens/profile_screen.dart';
-import 'package:proyecto1/utils/global_vales.dart';
 import 'package:proyecto1/utils/image_strings.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -25,7 +22,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final defaultColorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      key: _scaffoldKey, // Asigna la clave al Scaffold
+      key: _scaffoldKey,
+      // Asigna la clave al Scaffold
       appBar: AppBar(
         backgroundColor: defaultColorScheme.primary,
         leading: IconButton(
@@ -57,7 +55,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      drawer: myDrawer(), // Drawer asignado
+      drawer: myDrawer(),
+      // Drawer asignado
       body: Builder(builder: (context) {
         switch (index) {
           case 0:
@@ -165,6 +164,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
             title: const Text("CloneWars"),
             subtitle: const Text("Challenge"),
             leading: const Icon(Icons.coffee),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
+          ),
+          const Padding(
+              padding: EdgeInsets.all(8),
+              child: Divider(
+                height: 2,
+              )),
+          ListTile(
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  ModalRoute.withName("/login"));
+            },
+            title: const Text("Cerrar Sesion"),
+            //subtitle: const Text("Tema / Fuente"),
+            leading: const Icon(Icons.logout),
             trailing: const Icon(Icons.arrow_forward_ios_sharp),
           ),
         ],

@@ -15,10 +15,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? selectedFont = prefs.getString('selectedFont');
+  SharedPreferences prefsFont = await SharedPreferences.getInstance();
+  SharedPreferences prefsTheme = await SharedPreferences.getInstance();
+  String? selectedFont = prefsFont.getString('selectedFont');
 
-  bool? selectedTheme = prefs.getBool('selectedTheme');
+  bool? selectedTheme = prefsTheme.getBool('selectedTheme');
 
   GlobalValues.selectedFontFamily.value = selectedFont ?? 'Arimo';
   GlobalValues.flagThemeDark.value = selectedTheme ?? true;
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
                 "/preferences": (context) => const PreferencesScreen(),
                 "/preferences_drawer": (context) => const PreferencesDrawerScreen(),
                 "/clone": (context) => const CloneScreen(),
+                "/login": (context) => const LoginScreen(),
               },
               debugShowCheckedModeBanner: false,
             );
