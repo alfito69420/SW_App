@@ -16,6 +16,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final defaultColorScheme = Theme.of(context).colorScheme;
 
+    final currentWidth = MediaQuery.of(context).size.width;
+
     //  Controllers
     final txtUserController = TextEditingController();
     final txtpWDController = TextEditingController();
@@ -45,7 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final ctnCredentials = Positioned(
         bottom: 90,
         child: Container(
-          width: MediaQuery.of(context).size.width * .9,
+          width: currentWidth < 600
+              ? MediaQuery.of(context).size.width * .9
+              : MediaQuery.of(context).size.width * .5,
           // margin: EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
               color: defaultColorScheme.primary,
@@ -58,7 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final btnLogin = Positioned(
       bottom: 40,
-      width: MediaQuery.of(context).size.width * .9,
+      width: currentWidth < 600
+          ? MediaQuery.of(context).size.width * .9
+          : MediaQuery.of(context).size.width * .5,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: defaultColorScheme.primary),
@@ -84,11 +90,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Stack(alignment: Alignment.center, children: [
         Positioned.fill(
-          child: Lottie.asset(
-            "assets/lottie/sw_background.json",
-            repeat: true,
-            fit: BoxFit.cover,
-          ),
+          child: currentWidth < 600
+              ? Lottie.asset(
+                  "assets/lottie/sw_background.json",
+                  repeat: true,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset("assets/wp6511672.png"),
         ),
         Positioned(
           top: 10,
