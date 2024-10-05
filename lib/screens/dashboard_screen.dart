@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto1/screens/home_screen.dart';
 import 'package:proyecto1/screens/login_screen.dart';
 import 'package:proyecto1/screens/profile_screen.dart';
-import 'package:proyecto1/utils/image_strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -128,17 +130,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  File? selectedImage;
+
+  // Obtener la ruta de la imagen desde SharedPreferences
+  Future<String?> _loadImagePath() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('profile_image_path');
+  }
+
+  // Cargar la imagen al iniciar la pantalla
+  void _loadImage() async {
+    String? imagePath = await _loadImagePath();
+    if (imagePath != null) {
+      setState(() {
+        selectedImage = File(imagePath);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
   Widget myDrawer() {
     return Drawer(
       child: ListView(
         children: [
-          const UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-
-              backgroundImage: NetworkImage(ImageStrings.networPfp),
-            ),
-            accountName: Text("Alfito Arámburo"),
-            accountEmail: Text("equisde69420@gmail.com"),
+          UserAccountsDrawerHeader(
+            currentAccountPicture: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: selectedImage != null
+                    ? Image.file(selectedImage!)
+                    : const Image(image: AssetImage("assets/pfp.jpg"))),
+            accountName: const Text("Alfito Arámburo"),
+            accountEmail: const Text("equisde69420@gmail.com"),
           ),
           ListTile(
             onTap: () {
