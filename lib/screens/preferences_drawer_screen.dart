@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/color_picker_service.dart';
 import '../utils/global_vales.dart';
 
 class PreferencesDrawerScreen extends StatefulWidget {
@@ -25,6 +26,11 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
     await prefs.setBool('selectedTheme', theme);
   }
 
+  Future<void> _saveSelectedColor(Color color) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedColor', color.value.toRadixString(16));
+  }
+
   List<DropdownMenuItem<String>> get dropdownItems {
     return [
       const DropdownMenuItem(
@@ -45,6 +51,10 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
       ),
     ];
   }
+
+  final ColorPickerService _colorPickerService =
+      ColorPickerService(); // Instancia el servicio
+  ColorSwatch? _mainColor = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +127,37 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                     ),
                     themeButton(
                       "Tema Personalizado",
-                      defaultColorScheme.secondary,
+                      _mainColor as Color,
                       defaultColorScheme.onSecondary,
-                      () {},
+                      () {
+                        GlobalValues.customThemeEnabled.value =
+                            true; // Habilitar tema personalizado
+                        _colorPickerService.openColorPicker(
+                          context: context,
+                          onMainColorSelected: (ColorSwatch? newMainColor) {
+                            setState(() {
+                              _mainColor = newMainColor;
+
+                              _saveSelectedColor(_mainColor!);
+
+                              // Actualiza el esquema de colores en el ValueNotifier
+                              GlobalValues.colorScheme.value = ColorScheme(
+                                primary: _mainColor!,
+                                secondary: Colors.grey,
+                                surface: Colors.white,
+                                background: Colors.white,
+                                error: Colors.red,
+                                onPrimary: Colors.white,
+                                onSecondary: Colors.black,
+                                onSurface: Colors.black,
+                                onBackground: Colors.black,
+                                onError: Colors.white,
+                                brightness: Brightness.light,
+                              );
+                            });
+                          },
+                        );
+                      },
                     ),
                   ],
                 )

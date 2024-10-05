@@ -17,14 +17,34 @@ void main() async {
 
   SharedPreferences prefsFont = await SharedPreferences.getInstance();
   SharedPreferences prefsTheme = await SharedPreferences.getInstance();
-  String? selectedFont = prefsFont.getString('selectedFont');
+  SharedPreferences prefsColor = await SharedPreferences.getInstance();
 
+  String? selectedFont = prefsFont.getString('selectedFont');
   bool? selectedTheme = prefsTheme.getBool('selectedTheme');
+  String? selectedColorString = prefsColor.getString('selectedColor');
+
+  // Convierte el string hexadecimal a Color
+  Color selectedColor = selectedColorString != null
+      ? Color(int.parse('0xff$selectedColorString'))
+      : Colors.blue; // Color predeterminado
 
   GlobalValues.selectedFontFamily.value = selectedFont ?? 'Arimo';
   GlobalValues.flagThemeDark.value = selectedTheme ?? true;
 
-  runApp(const MyApp());
+  GlobalValues.colorScheme.value = ColorScheme(
+    primary: selectedColor,
+    secondary: Colors.grey,
+    surface: Colors.white,
+    error: Colors.red,
+    onPrimary: Colors.white,
+    onSecondary: Colors.black,
+    onSurface: Colors.black,
+    onBackground: Colors.black,
+    onError: Colors.white,
+    brightness: Brightness.light,
+  );
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -38,22 +58,33 @@ class MyApp extends StatelessWidget {
         return ValueListenableBuilder(
           valueListenable: GlobalValues.selectedFontFamily,
           builder: (context, selectedFontFamily, child) {
-            return MaterialApp(
-              title: 'Movies App',
-              home: const LoginScreen(),
-              theme: isDarkTheme
-                  ? MaterialTheme(_buildTextTheme(selectedFontFamily)).dark()
-                  : MaterialTheme(_buildTextTheme(selectedFontFamily)).light(),
-              routes: {
-                "/home": (context) => const DashboardScreen(),
-                "/movies": (context) => const MoviesScreen(),
-                "/onboarding": (context) => const OnBoardingScreen(),
-                "/preferences": (context) => const PreferencesScreen(),
-                "/preferences_drawer": (context) => const PreferencesDrawerScreen(),
-                "/clone": (context) => const CloneScreen(),
-                "/login": (context) => const LoginScreen(),
+            return ValueListenableBuilder<ColorScheme>(
+              valueListenable: GlobalValues.colorScheme,
+              builder: (context, colorScheme, child) {
+                return MaterialApp(
+                  title: 'Movies App',
+                  home: const LoginScreen(),
+                  theme: GlobalValues.customThemeEnabled.value
+                      ? MaterialTheme(_buildTextTheme(selectedFontFamily))
+                          .custom(colorScheme)
+                      : (isDarkTheme
+                          ? MaterialTheme(_buildTextTheme(selectedFontFamily))
+                              .dark()
+                          : MaterialTheme(_buildTextTheme(selectedFontFamily))
+                              .light()),
+                  routes: {
+                    "/home": (context) => const DashboardScreen(),
+                    "/movies": (context) => const MoviesScreen(),
+                    "/onboarding": (context) => const OnBoardingScreen(),
+                    "/preferences": (context) => const PreferencesScreen(),
+                    "/preferences_drawer": (context) =>
+                        const PreferencesDrawerScreen(),
+                    "/clone": (context) => const CloneScreen(),
+                    "/login": (context) => const LoginScreen(),
+                  },
+                  debugShowCheckedModeBanner: false,
+                );
               },
-              debugShowCheckedModeBanner: false,
             );
           },
         );

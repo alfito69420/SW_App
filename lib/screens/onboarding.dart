@@ -32,7 +32,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     final defaultColorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: defaultColorScheme.primaryContainer,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -56,6 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         style: const TextStyle(
                           fontSize: 35,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black
                         ),
                       ),
                       const SizedBox(
@@ -66,7 +67,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 18,
-                            color: defaultColorScheme.onPrimaryContainer),
+                            color: Colors.black),
                       )
                     ],
                   ),

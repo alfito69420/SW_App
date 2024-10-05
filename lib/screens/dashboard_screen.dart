@@ -134,6 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           const UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
+
               backgroundImage: NetworkImage(ImageStrings.networPfp),
             ),
             accountName: Text("Alfito Arámburo"),
