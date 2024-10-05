@@ -1,12 +1,11 @@
+import 'dart:io';
+
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:proyecto1/screens/clon_screen.dart';
 import 'package:proyecto1/screens/home_screen.dart';
+import 'package:proyecto1/screens/login_screen.dart';
 import 'package:proyecto1/screens/profile_screen.dart';
-import 'package:proyecto1/utils/global_vales.dart';
-import 'package:proyecto1/utils/image_strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -25,7 +24,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final defaultColorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      key: _scaffoldKey, // Asigna la clave al Scaffold
+      key: _scaffoldKey,
+      // Asigna la clave al Scaffold
       appBar: AppBar(
         backgroundColor: defaultColorScheme.primary,
         leading: IconButton(
@@ -57,7 +57,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      drawer: myDrawer(), // Drawer asignado
+      drawer: myDrawer(),
+      // Drawer asignado
       body: Builder(builder: (context) {
         switch (index) {
           case 0:
@@ -80,6 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           index = i;
         }),
       ),
+      /*
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         // No necesitas clave aquí para el FAB
@@ -124,29 +126,90 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ],
-      ),
+      ),*/
     );
+  }
+
+  File? selectedImage;
+
+  // Obtener la ruta de la imagen desde SharedPreferences
+  Future<String?> _loadImagePath() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('profile_image_path');
+  }
+
+  // Cargar la imagen al iniciar la pantalla
+  void _loadImage() async {
+    String? imagePath = await _loadImagePath();
+    if (imagePath != null) {
+      setState(() {
+        selectedImage = File(imagePath);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
   }
 
   Widget myDrawer() {
     return Drawer(
       child: ListView(
         children: [
-          const UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(ImageStrings.networPfp),
-            ),
-            accountName: Text("Alfito Arámburo"),
-            accountEmail: Text("equisde69420@gmail.com"),
+          UserAccountsDrawerHeader(
+            currentAccountPicture: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: selectedImage != null
+                    ? Image.file(selectedImage!)
+                    : const Image(image: AssetImage("assets/pfp.jpg"))),
+            accountName: const Text("Alfito Arámburo"),
+            accountEmail: const Text("equisde69420@gmail.com"),
           ),
           ListTile(
             onTap: () {
               Navigator.pushNamed(context, "/movies");
             },
-            title: const Text("Pelicula"),
-            subtitle: const Text("lorem ipsum"),
+            title: const Text("Peliculas"),
+            //subtitle: const Text("lorem ipsum"),
             leading: const Icon(Icons.movie),
-            trailing: const Icon(Icons.arrow_right_alt),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, "/preferences_drawer");
+            },
+            title: const Text("Preferencias"),
+            subtitle: const Text("Tema / Fuente"),
+            leading: const Icon(Icons.room_preferences),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, "/clone");
+            },
+            title: const Text("CloneWars"),
+            subtitle: const Text("Challenge"),
+            leading: const Icon(Icons.coffee),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
+          ),
+          const Padding(
+              padding: EdgeInsets.all(8),
+              child: Divider(
+                height: 2,
+              )),
+          ListTile(
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  ModalRoute.withName("/login"));
+            },
+            title: const Text("Cerrar Sesion"),
+            //subtitle: const Text("Tema / Fuente"),
+            leading: const Icon(Icons.logout),
+            trailing: const Icon(Icons.arrow_forward_ios_sharp),
           ),
         ],
       ),
