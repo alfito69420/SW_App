@@ -17,8 +17,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //  Handled Images
   File? selectedImage;
 
-  //late final returnedPickedImage;
-
   @override
   Widget build(BuildContext context) {
     //  Colores

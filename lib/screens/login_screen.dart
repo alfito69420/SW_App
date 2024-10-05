@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +14,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final defaultColorScheme = Theme.of(context).colorScheme;
+
+    final currentWidth = MediaQuery.of(context).size.width;
+
     //  Controllers
     final txtUserController = TextEditingController();
     final txtpWDController = TextEditingController();
@@ -21,10 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final txtUser = TextFormField(
       keyboardType: TextInputType.emailAddress,
       controller: txtUserController,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
           prefixIcon: Icon(
         Icons.person,
-        color: Color.fromARGB(255, 255, 85, 7),
+        color: defaultColorScheme.onPrimary,
       )),
     );
 
@@ -32,20 +37,22 @@ class _LoginScreenState extends State<LoginScreen> {
       keyboardType: TextInputType.emailAddress,
       obscureText: true,
       controller: txtpWDController,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
           prefixIcon: Icon(
         Icons.password,
-        color: Color.fromARGB(255, 255, 85, 7),
+        color: defaultColorScheme.onPrimary,
       )),
     );
 
     final ctnCredentials = Positioned(
         bottom: 90,
         child: Container(
-          width: MediaQuery.of(context).size.width * .9,
+          width: currentWidth < 600
+              ? MediaQuery.of(context).size.width * .9
+              : MediaQuery.of(context).size.width * .5,
           // margin: EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-              color: Colors.orangeAccent,
+              color: defaultColorScheme.primary,
               borderRadius: BorderRadius.circular(10)),
           child: ListView(
             shrinkWrap: true,
@@ -55,45 +62,53 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final btnLogin = Positioned(
       bottom: 40,
-      width: MediaQuery.of(context).size.width * .9,
+      width: currentWidth < 600
+          ? MediaQuery.of(context).size.width * .9
+          : MediaQuery.of(context).size.width * .5,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.amberAccent),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: defaultColorScheme.primary),
         onPressed: () {
           isLoading = true;
           setState(() {});
-          Future.delayed(const Duration(milliseconds: 1000))
-              .then((value) => {isLoading = false,
-              setState(() {}),
-              Navigator.pushNamed(context, "/home")
-              
+          Future.delayed(const Duration(milliseconds: 1000)).then((value) => {
+                isLoading = false,
+                setState(() {}),
+                Navigator.pushNamed(context, "/onboarding")
               });
         },
-        child: const Text('Validar usuario...'),
+        child: Text(
+          'Validar usuario...',
+          style: TextStyle(color: defaultColorScheme.onPrimary),
+        ),
       ),
     );
 
-    final gifLoading =
-        Positioned(top: 0.5, child: Image.asset("assets/loading.gif"));
+    final gifLoading = Positioned(
+        bottom: 250, child: Lottie.asset("assets/lottie/22.json", width: 150));
 
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.fill, image: AssetImage("assets/sw_mando.jpg"))),
-        child: Stack(alignment: Alignment.center, children: [
-          Positioned(
-              top: 10,
-              child: Image.asset(
-                "assets/sw_logo_black.png",
-                width: 200,
-              )),
-          ctnCredentials,
-          btnLogin,
-          isLoading ? gifLoading : Container()
-        ]),
-      ),
+      body: Stack(alignment: Alignment.center, children: [
+        Positioned.fill(
+          child: currentWidth < 600
+              ? Lottie.asset(
+                  "assets/lottie/sw_background.json",
+                  repeat: true,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset("assets/wp6511672.png"),
+        ),
+        Positioned(
+          top: 10,
+          child: Image.asset(
+            "assets/sw_white_logo.webp",
+            width: 200,
+          ),
+        ),
+        ctnCredentials,
+        btnLogin,
+        isLoading ? gifLoading : Container(),
+      ]),
     );
   }
 }
