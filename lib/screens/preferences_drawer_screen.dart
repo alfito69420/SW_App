@@ -106,6 +106,7 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                       Colors.white,
                       Colors.black,
                       () {
+                        GlobalValues.customThemeEnabled.value = false;
                         GlobalValues.flagThemeDark.value = false;
                         _saveSelectedTheme(false);
                       },
@@ -118,6 +119,7 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                       Colors.black,
                       Colors.white,
                       () {
+                        GlobalValues.customThemeEnabled.value = false;
                         GlobalValues.flagThemeDark.value = true;
                         _saveSelectedTheme(true);
                       },
@@ -127,9 +129,10 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                     ),
                     themeButton(
                       "Tema Personalizado",
-                      _mainColor as Color,
-                      defaultColorScheme.onSecondary,
+                      Colors.black38,
+                      Colors.white,
                       () {
+                        GlobalValues.flagThemeDark.value = false;
                         GlobalValues.customThemeEnabled.value =
                             true; // Habilitar tema personalizado
                         _colorPickerService.openColorPicker(

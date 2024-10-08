@@ -80,7 +80,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   }
 
   final ColorPickerService _colorPickerService =
-  ColorPickerService(); // Instancia el servicio
+      ColorPickerService(); // Instancia el servicio
   ColorSwatch? _mainColor = Colors.blue;
 
   @override
@@ -102,6 +102,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               Colors.white,
               Colors.black,
               () {
+                GlobalValues.customThemeEnabled.value = false;
                 GlobalValues.flagThemeDark.value = false;
                 _saveSelectedTheme(false);
               },
@@ -111,18 +112,19 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               Colors.black,
               Colors.white,
               () {
+                GlobalValues.customThemeEnabled.value = false;
                 GlobalValues.flagThemeDark.value = true;
                 _saveSelectedTheme(true);
               },
             ),
             themeButton(
               "Tema Personalizado",
-              defaultColorScheme.secondary,
-              defaultColorScheme.onSecondary,
+              Colors.black38,
+              Colors.white,
               () {
-
+                GlobalValues.flagThemeDark.value = false;
                 GlobalValues.customThemeEnabled.value =
-                true; // Habilitar tema personalizado
+                    true; // Habilitar tema personalizado
                 _colorPickerService.openColorPicker(
                   context: context,
                   onMainColorSelected: (ColorSwatch? newMainColor) {

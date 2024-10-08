@@ -44,7 +44,7 @@ void main() async {
     brightness: Brightness.light,
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -65,13 +65,9 @@ class MyApp extends StatelessWidget {
                   title: 'Movies App',
                   home: const LoginScreen(),
                   theme: GlobalValues.customThemeEnabled.value
-                      ? MaterialTheme(_buildTextTheme(selectedFontFamily))
-                          .custom(colorScheme)
-                      : (isDarkTheme
-                          ? MaterialTheme(_buildTextTheme(selectedFontFamily))
-                              .dark()
-                          : MaterialTheme(_buildTextTheme(selectedFontFamily))
-                              .light()),
+                      ? MaterialTheme(_buildTextTheme(selectedFontFamily)).custom(colorScheme)
+                      : (isDarkTheme ? MaterialTheme(_buildTextTheme(selectedFontFamily)).dark()
+                          : MaterialTheme(_buildTextTheme(selectedFontFamily)).light()),
                   routes: {
                     "/home": (context) => const DashboardScreen(),
                     "/movies": (context) => const MoviesScreen(),
