@@ -31,6 +31,11 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
     await prefs.setString('selectedColor', color.value.toRadixString(16));
   }
 
+  Future<void> _saveCustomThemeEnabled(bool enabled) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('customThemeEnabled', enabled);
+  }
+
   List<DropdownMenuItem<String>> get dropdownItems {
     return [
       const DropdownMenuItem(
@@ -105,9 +110,20 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                       "Tema Luminoso",
                       Colors.white,
                       Colors.black,
-                      () {
+                      () async {
+                        // Desactiva el tema personalizado
+                        GlobalValues.customThemeEnabled.value = false;
+                        await _saveCustomThemeEnabled(false);
+
+                        // Activa el tema claro
                         GlobalValues.flagThemeDark.value = false;
-                        _saveSelectedTheme(false);
+                        await _saveSelectedTheme(false);
+
+                        setState(() {});
+                        print(
+                            "Custom theme enabled(PD): ${GlobalValues.customThemeEnabled.value}");
+                        print(
+                            "Dark theme enabled (PD): ${GlobalValues.flagThemeDark.value}");
                       },
                     ),
                     const SizedBox(
@@ -117,9 +133,18 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                       "Tema Oscuro",
                       Colors.black,
                       Colors.white,
-                      () {
-                        GlobalValues.flagThemeDark.value = true;
-                        _saveSelectedTheme(true);
+                      () async {
+                        GlobalValues.customThemeEnabled.value =false; // Desactivar el tema personalizado
+                        await _saveCustomThemeEnabled(false); // Guardar preferencia
+                        GlobalValues.flagThemeDark.value =true; // Activar tema oscuro
+                        await _saveSelectedTheme(true); // Guardar tema oscuro
+
+
+
+                        print(
+                            "Custom theme enabled(PD): ${GlobalValues.customThemeEnabled.value}");
+                        print(
+                            "Dark theme enabled (PD): ${GlobalValues.flagThemeDark.value}");
                       },
                     ),
                     const SizedBox(
@@ -127,18 +152,22 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                     ),
                     themeButton(
                       "Tema Personalizado",
-                      _mainColor as Color,
-                      defaultColorScheme.onSecondary,
-                      () {
-                        GlobalValues.customThemeEnabled.value =
-                            true; // Habilitar tema personalizado
+                      Colors.black38,
+                      Colors.white,
+                      () async {
+                        GlobalValues.flagThemeDark.value = false;
+                        GlobalValues.customThemeEnabled.value =true; // Habilitar tema personalizado
+                        await _saveCustomThemeEnabled(true); // Guardar preferencia
+                        await _saveSelectedTheme(false); // Guardar tema claro
+
+                        print("Se activo customTheme: ${GlobalValues.customThemeEnabled.value}");
+                        print("Se desactivo darkTheme: ${GlobalValues.flagThemeDark.value}");
                         _colorPickerService.openColorPicker(
                           context: context,
-                          onMainColorSelected: (ColorSwatch? newMainColor) {
+                          onMainColorSelected:
+                              (ColorSwatch? newMainColor) async {
                             setState(() {
                               _mainColor = newMainColor;
-
-                              _saveSelectedColor(_mainColor!);
 
                               // Actualiza el esquema de colores en el ValueNotifier
                               GlobalValues.colorScheme.value = ColorScheme(
@@ -154,6 +183,8 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                                 onError: Colors.white,
                                 brightness: Brightness.light,
                               );
+
+                              _saveSelectedColor(_mainColor!);
                             });
                           },
                         );

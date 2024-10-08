@@ -7,6 +7,8 @@ import 'package:proyecto1/screens/login_screen.dart';
 import 'package:proyecto1/screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/global_vales.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -201,6 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               )),
           ListTile(
             onTap: () {
+              print("Custom theme enabled (logout): ${GlobalValues.customThemeEnabled.value}");
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
