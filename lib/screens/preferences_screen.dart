@@ -79,6 +79,11 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     await prefs.setString('selectedColor', color.value.toRadixString(16));
   }
 
+  Future<void> _saveCustomThemeEnabled(bool enabled) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('customThemeEnabled', enabled);
+  }
+
   final ColorPickerService _colorPickerService =
       ColorPickerService(); // Instancia el servicio
   ColorSwatch? _mainColor = Colors.blue;
@@ -125,6 +130,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 GlobalValues.flagThemeDark.value = false;
                 GlobalValues.customThemeEnabled.value =
                     true; // Habilitar tema personalizado
+                _saveCustomThemeEnabled(true); // Guardar preferencia
                 _colorPickerService.openColorPicker(
                   context: context,
                   onMainColorSelected: (ColorSwatch? newMainColor) {

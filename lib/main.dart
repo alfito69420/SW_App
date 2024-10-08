@@ -10,27 +10,22 @@ import 'package:proyecto1/utils/global_vales.dart';
 import 'package:proyecto1/utils/material_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//void main() => runApp(const MyApp());
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SharedPreferences prefsFont = await SharedPreferences.getInstance();
-  SharedPreferences prefsTheme = await SharedPreferences.getInstance();
-  SharedPreferences prefsColor = await SharedPreferences.getInstance();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  String? selectedFont = prefsFont.getString('selectedFont');
-  bool? selectedTheme = prefsTheme.getBool('selectedTheme');
-  String? selectedColorString = prefsColor.getString('selectedColor');
-
-  // Convierte el string hexadecimal a Color
+  String? selectedFont = prefs.getString('selectedFont');
+  bool? selectedTheme = prefs.getBool('selectedTheme');
+  String? selectedColorString = prefs.getString('selectedColor');
+  bool? customThemeEnabled = prefs.getBool('customThemeEnabled');
   Color selectedColor = selectedColorString != null
       ? Color(int.parse('0xff$selectedColorString'))
-      : Colors.blue; // Color predeterminado
+      : Colors.blue;
 
   GlobalValues.selectedFontFamily.value = selectedFont ?? 'Arimo';
-  GlobalValues.flagThemeDark.value = selectedTheme ?? true;
-
+  GlobalValues.flagThemeDark.value = selectedTheme ?? false;
+  GlobalValues.customThemeEnabled.value = customThemeEnabled ?? false;
   GlobalValues.colorScheme.value = ColorScheme(
     primary: selectedColor,
     secondary: Colors.grey,
@@ -44,6 +39,9 @@ void main() async {
     brightness: Brightness.light,
   );
 
+  print("Custom theme enabled: ${GlobalValues.customThemeEnabled.value}");
+  print("Dark theme enabled: ${GlobalValues.flagThemeDark.value}");
+
   runApp(const MyApp());
 }
 
@@ -52,22 +50,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (GlobalValues.customThemeEnabled.value) {
+      GlobalValues.flagThemeDark.value = false;
+    } else if (GlobalValues.flagThemeDark.value) {
+      GlobalValues.customThemeEnabled.value = false;
+    }
+
     return ValueListenableBuilder(
       valueListenable: GlobalValues.flagThemeDark,
       builder: (context, isDarkTheme, child) {
         return ValueListenableBuilder(
           valueListenable: GlobalValues.selectedFontFamily,
           builder: (context, selectedFontFamily, child) {
-            return ValueListenableBuilder<ColorScheme>(
+            return ValueListenableBuilder(
               valueListenable: GlobalValues.colorScheme,
               builder: (context, colorScheme, child) {
                 return MaterialApp(
                   title: 'Movies App',
                   home: const LoginScreen(),
                   theme: GlobalValues.customThemeEnabled.value
-                      ? MaterialTheme(_buildTextTheme(selectedFontFamily)).custom(colorScheme)
-                      : (isDarkTheme ? MaterialTheme(_buildTextTheme(selectedFontFamily)).dark()
-                          : MaterialTheme(_buildTextTheme(selectedFontFamily)).light()),
+                      ? MaterialTheme(_buildTextTheme(selectedFontFamily))
+                          .custom(colorScheme)
+                      : (isDarkTheme == true
+                          ? MaterialTheme(_buildTextTheme(selectedFontFamily))
+                              .dark()
+                          : MaterialTheme(_buildTextTheme(selectedFontFamily))
+                              .light()),
                   routes: {
                     "/home": (context) => const DashboardScreen(),
                     "/movies": (context) => const MoviesScreen(),
