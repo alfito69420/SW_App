@@ -114,7 +114,7 @@ class _MovieViewState extends State<MovieView> {
     );
 
     return ListView(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       shrinkWrap: true,
       children: [
         txtNameMovie,

@@ -7,8 +7,8 @@ import 'package:sqflite/sqflite.dart';
 import '../models/movies_dao.dart';
 
 class MoviesDatabase {
-  static final NAMEDB = 'MOVIESDB';
-  static final VERSIONDB = 1;
+  static const NAMEDB = 'MOVIESDB';
+  static const VERSIONDB = 1;
 
   static Database? _database;
 

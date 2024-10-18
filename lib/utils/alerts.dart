@@ -8,7 +8,7 @@ class Alerts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //return showAlert(context);
-    return Center();
+    return const Center();
   }
   
     Future<void> showAlert(BuildContext context) async {

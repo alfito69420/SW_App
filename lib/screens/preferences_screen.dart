@@ -33,20 +33,20 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   List<DropdownMenuItem<String>> get dropdownItems {
     return [
       const DropdownMenuItem(
+        value: "Arimo",
         child: Text(
           "Arimo",
           style: TextStyle(fontFamily: 'Arimo'),
-        ),
-        value: "Arimo", // Cambia el valor a la familia de fuente
+        ), // Cambia el valor a la familia de fuente
       ),
       const DropdownMenuItem(
-        child: Text("Timos", style: TextStyle(fontFamily: 'Tinos')),
         value: "Tinos",
+        child: Text("Timos", style: TextStyle(fontFamily: 'Tinos')),
       ),
       const DropdownMenuItem(
+        value: "Courier Prime",
         child: Text("Courier Prime",
             style: TextStyle(fontFamily: 'Courier Prime')),
-        value: "Courier Prime",
       ),
     ];
   }

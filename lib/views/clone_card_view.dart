@@ -12,7 +12,7 @@ class CloneCardView extends StatelessWidget {
   double columnAnimation = 0;
   int index;
 
-  CloneCardView(this.clone, this.pageOffset, this.index);
+  CloneCardView(this.clone, this.pageOffset, this.index, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,7 @@ class CloneCardView extends StatelessWidget {
                   Container(
                     height: 40,
                     decoration: BoxDecoration(
-                        color: Color(4281887036),
+                        color: const Color(0xff38693c),
                         borderRadius: BorderRadius.circular(20)),
                     child: const Row(children: <Widget>[
                       SizedBox(

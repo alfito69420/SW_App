@@ -24,8 +24,8 @@ class ColorPickerService {
           ),
           actions: [
             TextButton(
-              child: const Text('Cancelar'),
               onPressed: Navigator.of(context).pop,
+              child: const Text('Cancelar'),
             ),
             TextButton(
               child: const Text('Confirmar'),

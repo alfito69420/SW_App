@@ -39,20 +39,20 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
   List<DropdownMenuItem<String>> get dropdownItems {
     return [
       const DropdownMenuItem(
+        value: "Arimo",
         child: Text(
           "Arimo",
           style: TextStyle(fontFamily: 'Arimo'),
-        ),
-        value: "Arimo", // Cambia el valor a la familia de fuente
+        ), // Cambia el valor a la familia de fuente
       ),
       const DropdownMenuItem(
-        child: Text("Timos", style: TextStyle(fontFamily: 'Tinos')),
         value: "Tinos",
+        child: Text("Timos", style: TextStyle(fontFamily: 'Tinos')),
       ),
       const DropdownMenuItem(
+        value: "Courier Prime",
         child: Text("Courier Prime",
             style: TextStyle(fontFamily: 'Courier Prime')),
-        value: "Courier Prime",
       ),
     ];
   }
@@ -66,7 +66,7 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
     final defaultColorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Preferencias"),
+        title: const Text("Preferencias"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -103,7 +103,7 @@ class _PreferencesDrawerScreenState extends State<PreferencesDrawerScreen> {
                   "Tema",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Spacer(),
+                const Spacer(),
                 Column(
                   children: [
                     themeButton(

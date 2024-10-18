@@ -36,11 +36,9 @@ void main() async {
     onSurface: Colors.black,
     onBackground: Colors.black,
     onError: Colors.white,
+    background: Colors.white,
     brightness: Brightness.light,
   );
-
-  print("Custom theme enabled: ${GlobalValues.customThemeEnabled.value}");
-  print("Dark theme enabled: ${GlobalValues.flagThemeDark.value}");
 
   runApp(const MyApp());
 }

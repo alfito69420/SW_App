@@ -8,6 +8,6 @@ class GlobalValues {
 
   //  Color Scheme
   static ValueNotifier<ColorScheme> colorScheme =
-      ValueNotifier<ColorScheme>(ColorScheme.light());
+      ValueNotifier<ColorScheme>(const ColorScheme.light());
   static ValueNotifier<bool> customThemeEnabled = ValueNotifier(false);
 }
